@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class startGame : MonoBehaviour {
 
@@ -12,6 +13,14 @@ public class startGame : MonoBehaviour {
     private bool hunterInstantiated = false;
     private GameObject gameHunter;
     private GameObject gameWolf;
+
+
+    public void targetsCollide()
+    {
+        Destroy(gameHunter);
+        Destroy(gameWolf);
+        SceneManager.LoadScene(1);
+    }
 
     private void Update()
     {

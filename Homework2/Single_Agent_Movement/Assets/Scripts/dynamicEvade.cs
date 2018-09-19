@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class dynamicEvade : MonoBehaviour {
 
@@ -12,10 +13,10 @@ public class dynamicEvade : MonoBehaviour {
     public float maxAcceleration;
     public Vector2 velocity;
     private Vector2 position;
-    private float orientation;
+    private float orientation = 0f;
     private Vector2 linearAcceleration;
-    private float rotation;
-    private float angularAcceleration;
+    private float rotation = 0f;
+    private float angularAcceleration = 1f;
 
     public float detectDistance;
     public float wanderOffset;
@@ -23,13 +24,26 @@ public class dynamicEvade : MonoBehaviour {
     public float wanderRate;
     private float wanderOrientation = 0f;
     private bool setWander = true;
+    private GameObject start;
 
     private void Start()
     {
         position = transform.position;
         velocity = new Vector2(0, 0);
+        start = GameObject.Find("startGame");
     }
 
+    private void OnGUI()
+    {
+        if (setWander)
+        {
+            GUI.Label(new Rect(0, 0, 250, 50), "Wolf: Wandering");
+        }
+        else
+        {
+            GUI.Label(new Rect(0, 0, 250, 50), "Wolf: Evading");
+        }
+    }
     private void wander()
     {
         wanderOrientation += Random.value * wanderRate;
@@ -37,7 +51,7 @@ public class dynamicEvade : MonoBehaviour {
         Vector2 wanderTarget = position + wanderOffset * (new Vector2(Mathf.Sin(orientation), Mathf.Cos(orientation)));
         wanderTarget += wanderRadius * (new Vector2(Mathf.Sin(orientation), Mathf.Cos(orientation)));
         linearAcceleration = maxAcceleration * new Vector2(Mathf.Sin(orientation), Mathf.Cos(orientation));
-        orientation = wanderOrientation;
+
 
     }
 
@@ -48,7 +62,7 @@ public class dynamicEvade : MonoBehaviour {
         float targetSpeed;
         if (distance < targetRadius)
         {
-            // do something else.
+            start.SendMessage("targetsCollide");
         }
 
         if (distance > dangerRadius)

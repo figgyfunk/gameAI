@@ -9,113 +9,65 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1398813849758988}
+  m_RootGameObject: {fileID: 1113845414661534}
   m_IsPrefabAsset: 1
---- !u!1 &1398813849758988
+--- !u!1 &1113845414661534
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4591469564935356}
-  - component: {fileID: 114146696146138988}
-  - component: {fileID: 50224620235839436}
-  - component: {fileID: 61087266439171084}
-  - component: {fileID: 212008424320185872}
+  - component: {fileID: 4579762484756082}
+  - component: {fileID: 114890627751806988}
+  - component: {fileID: 212267461716875762}
   m_Layer: 0
-  m_Name: Hunter
+  m_Name: Pursue Wolf
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4591469564935356
+--- !u!4 &4579762484756082
 Transform:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1398813849758988}
+  m_GameObject: {fileID: 1113845414661534}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.05, y: -2.9, z: 0}
+  m_LocalPosition: {x: -1.339424, y: -0.041139357, z: 0.12922274}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!50 &50224620235839436
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1398813849758988}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
---- !u!61 &61087266439171084
-BoxCollider2D:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1398813849758988}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 5, y: 6.3}
-    newSize: {x: 5, y: 6.3}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.2, y: 0.2}
-  m_EdgeRadius: 0
---- !u!114 &114146696146138988
+--- !u!114 &114890627751806988
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1398813849758988}
+  m_GameObject: {fileID: 1113845414661534}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3900554cb989d4f41b2e22d8e0a315c4, type: 3}
+  m_Script: {fileID: 11500000, guid: 158d2995e07297f40a713bce8ab550d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 1692669040362992, guid: e1e40b9641618c64d8c1f32757680e87, type: 2}
+  talkingTimer: 3
+  target: {fileID: 0}
+  house: {fileID: 0}
+  startGame: {fileID: 0}
   maxAcceleration: 1
-  targetRadius: 1
+  targetRadius: 0.5
   maxSpeed: 2
-  slowRadius: 1
+  slowRadius: 2
   timeToTarget: 0.1
   maxPrediction: 1
-  detectDistance: 5
-  wanderOffset: 3
-  wanderRadius: 3
-  wanderRate: 150
---- !u!212 &212008424320185872
+--- !u!212 &212267461716875762
 SpriteRenderer:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1398813849758988}
+  m_GameObject: {fileID: 1113845414661534}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -145,12 +97,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: b8f353ab1a18d7c4d83a5c3533d6a255, type: 3}
+  m_Sprite: {fileID: 21300000, guid: adce38e3c016f1942a14dad2cef887c8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 5, y: 6.3}
+  m_Size: {x: 5, y: 6.25}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1

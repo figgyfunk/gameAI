@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class dynamicPursue : MonoBehaviour {
+public class wolfPursue : MonoBehaviour {
 
+    public float talkingTimer;
     public GameObject target;
+    public GameObject house;
+    public GameObject startGame;
     public float maxAcceleration;
     public float targetRadius;
     public float maxSpeed;
@@ -12,18 +15,14 @@ public class dynamicPursue : MonoBehaviour {
     public float timeToTarget;
     public float maxPrediction;
     private Vector2 linearAcceleration;
-    private float angularAcceleration = 3f;
+    private float angularAcceleration;
     private Vector2 position;
-    private float orientation = 0f;
+    private float orientation;
     private Vector2 velocity;
-    private float rotation = 3f;
+    private float rotation;
+    private bool predictBool = true; 
 
-    public float detectDistance;
-    public float wanderOffset;
-    public float wanderRadius;
-    public float wanderRate;
-    private float wanderOrientation = 0f;
-    private bool setWander = true;
+    private bool talking = false; 
 
 
     private void Start()
@@ -34,32 +33,23 @@ public class dynamicPursue : MonoBehaviour {
 
     private void OnGUI()
     {
-        if (setWander)
+        if (talking)
         {
-            GUI.Label(new Rect(0, 30, 250, 50), "Hunter: Wandering");
+            GUI.Label(new Rect(0, 0, 250, 50), "Wolf: Talking");
         }
         else
         {
-            GUI.Label(new Rect(0, 30, 250, 50), "Hunter: Pursuing");
+            GUI.Label(new Rect(0, 0, 250, 50), "Wolf: Pursuing");
         }
     }
 
-    private void wander()
-    {
-        wanderOrientation += Random.value * wanderRate;
-        float targetOrientation = wanderOrientation + orientation;
-        Vector2 wanderTarget = position + wanderOffset * (new Vector2(Mathf.Sin(orientation), Mathf.Cos(orientation)));
-        wanderTarget += wanderRadius * (new Vector2(Mathf.Sin(orientation), Mathf.Cos(orientation)));
-        linearAcceleration = maxAcceleration * new Vector2(Mathf.Sin(orientation), Mathf.Cos(orientation));
-       
-    }
 
     private Vector3 predict()
     {
         Vector2 direction = target.transform.position - transform.position;
         float distance = direction.magnitude;
         float prediction;
-        float speed = velocity.magnitude; 
+        float speed = velocity.magnitude;
 
         if (speed <= distance / maxPrediction)
         {
@@ -70,21 +60,40 @@ public class dynamicPursue : MonoBehaviour {
             prediction = distance / speed;
         }
 
-        return new Vector2(target.transform.position.x, target.transform.position.y) + (prediction * target.GetComponent<dynamicEvade>().velocity);
+        return new Vector2(target.transform.position.x, target.transform.position.y) + (prediction * target.GetComponent<redMovement>().velocity);
     }
     private Vector2 arrive()
     {
-        Vector3 targetPos = predict();
+        Vector3 targetPos;
+        if (predictBool)
+        {
+            targetPos = predict();
+        }
+        else
+        {
+            targetPos = target.transform.position;
+        }
+        
         Vector2 direction = targetPos - transform.position;
         float distance = direction.magnitude;
         float targetSpeed;
 
-        if(distance < targetRadius)
+        if ((target.transform.position - transform.position).magnitude <= targetRadius)
         {
-            // do something else.
+            if (predictBool)
+            {
+                target.gameObject.SendMessage("talk");
+                talking = true;
+            }
+            else
+            {
+                startGame.SendMessage("wolfHouse");
+                Destroy(this.gameObject);
+            }
+            
         }
 
-        if( distance > slowRadius)
+        if ((target.transform.position - transform.position).magnitude > slowRadius)
         {
             targetSpeed = maxSpeed;
         }
@@ -98,9 +107,9 @@ public class dynamicPursue : MonoBehaviour {
         targetVelocity *= targetSpeed;
 
         Vector2 returnVelocity = targetVelocity - velocity;
-        returnVelocity /= timeToTarget; 
+        returnVelocity /= timeToTarget;
 
-        if(returnVelocity.magnitude > maxAcceleration)
+        if (returnVelocity.magnitude > maxAcceleration)
         {
             returnVelocity.Normalize();
             returnVelocity *= maxAcceleration;
@@ -112,47 +121,42 @@ public class dynamicPursue : MonoBehaviour {
     private void updateKinematics(float time)
     {
         position += velocity * time + .5f * linearAcceleration * time * time;
-        //orientation = Mathf.Atan2(-velocity.x, velocity.y);
         orientation += rotation * time + .5f * angularAcceleration * time * time;
 
         velocity += linearAcceleration * time;
         rotation += angularAcceleration * time;
-        
     }
 
     private void updateSteering()
     {
-         
+
         linearAcceleration = arrive();
         //angularAcceleration = 0f;
     }
 
+
+
     private void Update()
     {
 
-        if (setWander)
-        {
-            wander();
-            updateKinematics(Time.deltaTime);
-            gameObject.transform.position = position;
-            gameObject.transform.rotation = Quaternion.Euler(0,0, orientation);
-
-            if(target.GetComponent<dynamicEvade>().velocity != new Vector2(0, 0))
-            {
-                if ((target.transform.position - transform.position).magnitude <= detectDistance)
-                {
-                    setWander = false;
-                }
-            }
-            
-        }
-        else
+        if(!talking)
         {
             updateSteering();
             updateKinematics(Time.deltaTime);
             gameObject.transform.position = position;
             gameObject.transform.rotation = Quaternion.Euler(0, 0, orientation);
         }
-               
+        else
+        {
+            talkingTimer += -1 * Time.deltaTime;
+            if(talkingTimer <= 0)
+            {
+                target.gameObject.SendMessage("talk");
+                target = house; 
+                talking = false;
+                predictBool = false;
+            }
+        }
+
     }
 }
