@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class wolfPursue : MonoBehaviour {
 
+    public Sprite targetSprite;
     public float talkingTimer;
     public GameObject target;
     public GameObject house;
@@ -40,6 +41,13 @@ public class wolfPursue : MonoBehaviour {
         else
         {
             GUI.Label(new Rect(0, 0, 250, 50), "Wolf: Pursuing");
+            if (predictBool)
+            {
+                Vector3 targetPos = predict();
+                Vector2 pos = RectTransformUtility.WorldToScreenPoint(Camera.main, targetPos);
+                GUI.Label(new Rect(pos.x, Screen.height - pos.y, 20, 20), targetSprite.texture);
+            }
+            
         }
     }
 
@@ -72,6 +80,7 @@ public class wolfPursue : MonoBehaviour {
         else
         {
             targetPos = target.transform.position;
+            //Debug.Log("here");
         }
         
         Vector2 direction = targetPos - transform.position;
@@ -134,7 +143,17 @@ public class wolfPursue : MonoBehaviour {
         //angularAcceleration = 0f;
     }
 
-
+    private float updateOrientation()
+    {
+        if (velocity.magnitude > 0)
+        {
+            return Mathf.Atan2(-velocity.x, velocity.y);
+        }
+        else
+        {
+            return orientation;
+        }
+    }
 
     private void Update()
     {
@@ -144,7 +163,7 @@ public class wolfPursue : MonoBehaviour {
             updateSteering();
             updateKinematics(Time.deltaTime);
             gameObject.transform.position = position;
-            gameObject.transform.rotation = Quaternion.Euler(0, 0, orientation);
+            gameObject.transform.rotation = Quaternion.Euler(0, 0, updateOrientation() * Mathf.Rad2Deg);
         }
         else
         {

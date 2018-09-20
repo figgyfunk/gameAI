@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class dynamicPursue : MonoBehaviour {
 
     public GameObject target;
+    public Sprite targetSprite;
     public float maxAcceleration;
     public float targetRadius;
     public float maxSpeed;
@@ -41,6 +42,9 @@ public class dynamicPursue : MonoBehaviour {
         else
         {
             GUI.Label(new Rect(0, 30, 250, 50), "Hunter: Pursuing");
+            Vector3 targetPos = predict();
+            Vector2 pos = RectTransformUtility.WorldToScreenPoint(Camera.main, targetPos);
+            GUI.Label(new Rect(pos.x, Screen.height - pos.y, 20, 20), targetSprite.texture);
         }
     }
 
@@ -81,7 +85,7 @@ public class dynamicPursue : MonoBehaviour {
 
         if(distance < targetRadius)
         {
-            // do something else.
+            SceneManager.LoadScene("red_and_wolf");
         }
 
         if( distance > slowRadius)
@@ -127,6 +131,18 @@ public class dynamicPursue : MonoBehaviour {
         //angularAcceleration = 0f;
     }
 
+    private float updateOrientation()
+    {
+        if (velocity.magnitude > 0)
+        {
+            return Mathf.Atan2(-velocity.x, velocity.y);
+        }
+        else
+        {
+            return orientation;
+        }
+    }
+
     private void Update()
     {
 
@@ -135,7 +151,7 @@ public class dynamicPursue : MonoBehaviour {
             wander();
             updateKinematics(Time.deltaTime);
             gameObject.transform.position = position;
-            gameObject.transform.rotation = Quaternion.Euler(0,0, orientation);
+            gameObject.transform.rotation = Quaternion.Euler(0,0, Mathf.Rad2Deg * updateOrientation());
 
             if(target.GetComponent<dynamicEvade>().velocity != new Vector2(0, 0))
             {
@@ -151,7 +167,7 @@ public class dynamicPursue : MonoBehaviour {
             updateSteering();
             updateKinematics(Time.deltaTime);
             gameObject.transform.position = position;
-            gameObject.transform.rotation = Quaternion.Euler(0, 0, orientation);
+            gameObject.transform.rotation = Quaternion.Euler(0, 0, Mathf.Rad2Deg * updateOrientation());
         }
                
     }

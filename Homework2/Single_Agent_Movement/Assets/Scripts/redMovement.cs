@@ -11,8 +11,7 @@ public class redMovement : MonoBehaviour {
     public float slowRadius;
     public float maxSpeed;
     public float timeToTarget;
-    public Sprite mark;
-    private List<Vector2> checkPoints;
+    private List<Vector3> checkPoints;
     private Vector2 position;
     private Vector2 linearAcceleration;
     private Vector2 currentPoint;
@@ -29,7 +28,7 @@ public class redMovement : MonoBehaviour {
         position = transform.position;
     }
 
-    public void setPoints(List<Vector2> points)
+    public void setPoints(List<Vector3> points)
     {
         checkPoints = points;
         currentPoint = checkPoints[0];
@@ -37,9 +36,7 @@ public class redMovement : MonoBehaviour {
 
     private void OnGUI()
     {
-        Vector2 pos = RectTransformUtility.WorldToScreenPoint(Camera.main, currentPoint);
-       // Debug.Log(currentPoint + " " + pos);
-        GUI.Label(new Rect(pos.x, Screen.height - pos.y,75,75),mark.texture);
+       
         if (talking)
         {
             GUI.Label(new Rect(0, 30, 250, 50), "Red: Talking");
@@ -119,6 +116,18 @@ public class redMovement : MonoBehaviour {
             Destroy(this.gameObject);
         }
     }
+
+    private float updateOrientation()
+    {
+        if(velocity.magnitude > 0)
+        {
+            return Mathf.Atan2(-velocity.x, velocity.y);
+        }
+        else
+        {
+            return orientation;
+        }
+    }
     private void Update()
     {
         if (!talking)
@@ -126,6 +135,8 @@ public class redMovement : MonoBehaviour {
             seek();
             updateKinematics(Time.deltaTime);
             transform.position = position;
+            updateOrientation();
+            gameObject.transform.rotation = Quaternion.Euler(0, 0, Mathf.Rad2Deg * updateOrientation());
         }
         
         

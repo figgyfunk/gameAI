@@ -7,6 +7,6 @@ public class leaveScreen : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        SceneManager.LoadScene(1);  
+        SceneManager.LoadScene("red_and_wolf");  
     }
 }

@@ -55,7 +55,7 @@ MonoBehaviour:
   maxAcceleration: 2
   target: {fileID: 0}
   targetRadius: 1
-  slowRadius: 2
+  slowRadius: 1
   maxSpeed: 1
   timeToTarget: 0.1
 --- !u!212 &212566914479843254

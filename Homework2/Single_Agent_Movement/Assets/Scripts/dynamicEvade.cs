@@ -5,7 +5,9 @@ using UnityEngine.UI;
 
 public class dynamicEvade : MonoBehaviour {
 
+    public int numSegments;
     public GameObject target;
+    public Sprite targetSprite;
     public float targetRadius;
     public float dangerRadius;
     public float maxSpeed;
@@ -41,6 +43,7 @@ public class dynamicEvade : MonoBehaviour {
         }
         else
         {
+            
             GUI.Label(new Rect(0, 0, 250, 50), "Wolf: Evading");
         }
     }
@@ -108,6 +111,37 @@ public class dynamicEvade : MonoBehaviour {
         //angularAcceleration = 0f;
     }
 
+    public void DoRenderer()
+    {
+        LineRenderer lineRenderer = gameObject.GetComponent<LineRenderer>();
+        float radius = target.GetComponent<dynamicPursue>().slowRadius;
+        lineRenderer.positionCount =(numSegments + 1);
+        lineRenderer.useWorldSpace = false;
+
+        float deltaTheta = (float)(2.0 * Mathf.PI) / numSegments;
+        float theta = 0f;
+
+        for (int i = 0; i < numSegments + 1; i++)
+        {
+            float x = radius * Mathf.Cos(theta);
+            float z = radius * Mathf.Sin(theta);
+            Vector3 pos = new Vector3(x, z, 0);
+            lineRenderer.SetPosition(i, pos);
+            theta += deltaTheta;
+        }
+    }
+
+    private float updateOrientation()
+    {
+        if (velocity.magnitude > 0)
+        {
+            return Mathf.Atan2(-velocity.x, velocity.y);
+        }
+        else
+        {
+            return orientation;
+        }
+    }
     private void Update()
     {
         if (setWander)
@@ -123,9 +157,10 @@ public class dynamicEvade : MonoBehaviour {
         {
             updateSteering();
             updateKinematics(Time.deltaTime);
+            DoRenderer();
         }
         gameObject.transform.position = position;
-        gameObject.transform.rotation = Quaternion.Euler(0, 0, orientation);
+        gameObject.transform.rotation = Quaternion.Euler(0, 0, Mathf.Rad2Deg * updateOrientation());
 
 
     }

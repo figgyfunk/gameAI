@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class hunterSeek : MonoBehaviour {
 
@@ -32,7 +33,7 @@ public class hunterSeek : MonoBehaviour {
 
         if (distance < targetRadius)
         {
-            // do something else.
+            SceneManager.LoadScene("ending_scene");
         }
 
         if (distance > slowRadius)
@@ -67,11 +68,24 @@ public class hunterSeek : MonoBehaviour {
         velocity += linearAcceleration * time;
         rotation += angularAcceleration * time;
     }
+
+    private float updateOrientation()
+    {
+        if (velocity.magnitude > 0)
+        {
+            return Mathf.Atan2(-velocity.x, velocity.y);
+        }
+        else
+        {
+            return orientation;
+        }
+    }
     // Update is called once per frame
     void Update ()
     {
         seek();
         updateKinematics(Time.deltaTime);
         transform.position = position;
-	}
+        gameObject.transform.rotation = Quaternion.Euler(0, 0, updateOrientation() * Mathf.Rad2Deg);
+    }
 }

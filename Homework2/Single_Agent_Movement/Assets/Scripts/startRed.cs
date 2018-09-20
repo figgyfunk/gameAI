@@ -13,22 +13,27 @@ public class startRed : MonoBehaviour {
     public float wolfTimer;
     private bool wolfInstantiated = false;
 
-    private List<Vector2> checkPoints;
+    private List<Vector3> checkPoints;
     private int i = 0;
 
 	void Start ()
     {
-        checkPoints = new List<Vector2>();
+       
+        checkPoints = new List<Vector3>();
+  
         for(i = 0; i < 10; i++)
         {
             Vector2 pos = new Vector2(Random.value, Random.value);
             pos = Camera.main.ViewportToWorldPoint(pos);
             checkPoints.Add(pos);
+            GetComponent<LineRenderer>().SetPosition(i, new Vector3(pos.x, pos.y, 0));
             //Debug.Log(pos);
         }
         checkPoints.Add(grandmaHouse.transform.position);
         red.GetComponent<redMovement>().setPoints(checkPoints);
-	}
+        GetComponent<LineRenderer>().SetPosition(i, new Vector3(grandmaHouse.transform.position.x, grandmaHouse.transform.position.y, 0));
+
+    }
 
     public void wolfHouse()
     {
@@ -36,12 +41,15 @@ public class startRed : MonoBehaviour {
         pos = Camera.main.ViewportToWorldPoint(pos);
         gameHunter = Instantiate(hunter, pos, Quaternion.identity);
         gameHunter.GetComponent<hunterSeek>().target = grandmaHouse;
+        grandmaHouse.GetComponent<houseCircle>().radius = gameHunter.GetComponent<hunterSeek>().slowRadius;
+        grandmaHouse.GetComponent<houseCircle>().DoRenderer();
     }
     private void Update()
     {
         if (!wolfInstantiated)
         {
-            if(Time.time >= wolfTimer)
+            wolfTimer -= Time.deltaTime;
+            if( wolfTimer <= 0)
             {
                 Vector2 pos = new Vector2(Random.value, Random.value);
                 pos = Camera.main.ViewportToWorldPoint(pos);

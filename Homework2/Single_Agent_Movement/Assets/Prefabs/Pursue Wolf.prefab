@@ -52,6 +52,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 158d2995e07297f40a713bce8ab550d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetSprite: {fileID: 21300000, guid: 446d3d2bba791c34ea406ea0c982e002, type: 3}
   talkingTimer: 3
   target: {fileID: 0}
   house: {fileID: 0}

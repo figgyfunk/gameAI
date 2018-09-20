@@ -79,7 +79,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 5, y: 6.3}
+    oldSize: {x: 0.64, y: 0.8}
     newSize: {x: 5, y: 6.3}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -100,6 +100,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 1692669040362992, guid: e1e40b9641618c64d8c1f32757680e87, type: 2}
+  targetSprite: {fileID: 21300000, guid: 446d3d2bba791c34ea406ea0c982e002, type: 3}
   maxAcceleration: 1
   targetRadius: 1
   maxSpeed: 2
@@ -107,9 +108,9 @@ MonoBehaviour:
   timeToTarget: 0.1
   maxPrediction: 1
   detectDistance: 5
-  wanderOffset: 3
-  wanderRadius: 3
-  wanderRate: 150
+  wanderOffset: 50
+  wanderRadius: 50
+  wanderRate: 200
 --- !u!212 &212008424320185872
 SpriteRenderer:
   m_ObjectHideFlags: 1
